@@ -3,9 +3,10 @@ on: issue_comment
 jobs:
   review-pr:
     name: Review PR
-    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/check') }}
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/check') && github.event.sender.id == github.event.issue.user.id }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Add Comment
         run: gh issue comment "$NUMBER" --body "$BODY"
         env:
@@ -14,11 +15,10 @@ jobs:
           NUMBER: ${{ github.event.issue.number }}
           BODY: >
             This PR is not ready for review.
-      - name: User Info
-        env:
-          EVENT_SENDER: ${{ github.event.sender.id }}
-          EVENT_ISSUE_USER: ${{ github.event.issue.user.id }}
-        run: echo "Sender ${EVENT_SENDER}\nIssue User ${EVENT_ISSUE_USER}"
+      - name: Current working directory
+        run: pwd
+      - name: What do we have here?
+        run: ls -la
       - name: Run Linter
         run: bash scripts/linter.sh
       - name: Fail PR

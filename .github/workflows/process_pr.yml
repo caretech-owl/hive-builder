@@ -15,7 +15,7 @@ jobs:
           BODY: >
             This PR is not ready for review.
       - name: Fail the job
-        run: echo "::error This PR is not ready for review."
+        run: echo "::setFailed This PR is not ready for review."
 
   merge-pr:
     name: Merge PR Request
@@ -24,4 +24,4 @@ jobs:
     environment: live
     steps:
       -  name: Merge PR
-         run: echo "::error Not implemented yet"
+         run: echo "::setFailed Not implemented yet"

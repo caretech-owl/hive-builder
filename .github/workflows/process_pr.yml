@@ -3,7 +3,7 @@ on: issue_comment
 jobs:
   review-pr:
     name: Review PR
-    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/check') && github.event.sender == github.event.issue.user }}
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/check') }}
     runs-on: ubuntu-latest
     steps:
       - name: Add Comment
@@ -14,6 +14,11 @@ jobs:
           NUMBER: ${{ github.event.issue.number }}
           BODY: >
             This PR is not ready for review.
+      - name: User Info
+        env:
+          EVENT_SENDER: ${{ github.event.sender }}
+          EVENT_ISSUE_USER: ${{ github.event.issue.user }}
+        run: echo "Sender ${EVENT_SENDER}\nIssue User ${EVENT_ISSUE_USER}"
       - name: Run Linter
         run: bash scripts/linter.sh
       - name: Fail PR

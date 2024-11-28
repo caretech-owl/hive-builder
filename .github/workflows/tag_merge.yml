@@ -1,0 +1,86 @@
+name: Tag and Release
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+
+permissions:
+  id-token: write
+  contents: write
+  packages: write
+  attestations: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    if: startsWith( github.event.head_commit.message, 'release(' )
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Set Tag Output
+        id: set-tag
+        run: |
+          image_name=$(bash scripts/process_msg.sh "${{github.event.head_commit.message}}" 1)
+          image_ver=$(bash scripts/process_msg.sh "${{github.event.head_commit.message}}" 2)
+          echo "::set-output name=img_name::${image_name}"
+          echo "::set-output name=img_ver::${image_ver}"
+          echo ${image_name}/${image_ver}
+      - name: Log in to the Container Registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set Up QEMU
+        uses: docker/setup-qemu-action@v3
+      
+      - name: Set Up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+    
+      - name: Docker Meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+            images: |
+              ${{ env.REGISTRY }}/caretech-owl/${{ steps.set-tag.outputs.img_name }}
+            tags: |
+              type=semver,pattern={{version}},value=v${{ steps.set-tag.outputs.img_ver }}
+              type=semver,pattern={{major}}.{{minor}},value=v${{ steps.set-tag.outputs.img_ver }}
+              type=semver,pattern={{major}},value=v${{ steps.set-tag.outputs.img_ver }}
+
+      - name: Build and Push Docker Image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          platforms: linux/amd64,linux/arm64
+          context: images/${{ steps.set-tag.outputs.img_name }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+    
+      - name: Create Tag
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ github.token }}
+          script: |
+              github.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "refs/tags/${{ steps.set-tag.outputs.img_name }}/v${{ steps.set-tag.outputs.img_ver }}",
+                sha: context.sha
+              })
+
+       # This step generates an artifact attestation for the image, which is an unforgeable
+       # statement about where and how it was built. It increases supply chain security for
+       # people who consume the image. For more information, see 
+       # "[AUTOTITLE](/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds)."
+      - name: Generate Artifact Attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/caretech-owl/${{ steps.set-tag.outputs.img_name }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true

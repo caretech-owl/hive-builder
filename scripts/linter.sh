@@ -1,3 +1,4 @@
 #!/bin/bash
 
-echo "Passed!"
+echo "Not implemented yet"
+echo 1

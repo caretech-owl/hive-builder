@@ -16,8 +16,8 @@ jobs:
             This PR is not ready for review.
       - name: User Info
         env:
-          EVENT_SENDER: ${{ github.event.sender }}
-          EVENT_ISSUE_USER: ${{ github.event.issue.user }}
+          EVENT_SENDER: ${{ github.event.sender.id }}
+          EVENT_ISSUE_USER: ${{ github.event.issue.user.id }}
         run: echo "Sender ${EVENT_SENDER}\nIssue User ${EVENT_ISSUE_USER}"
       - name: Run Linter
         run: bash scripts/linter.sh

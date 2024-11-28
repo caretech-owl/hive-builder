@@ -15,10 +15,6 @@ jobs:
           NUMBER: ${{ github.event.issue.number }}
           BODY: >
             This PR is not ready for review.
-      - name: Current working directory
-        run: pwd
-      - name: What do we have here?
-        run: ls -la
       - name: Run Linter
         run: bash scripts/linter.sh
       - name: Fail PR

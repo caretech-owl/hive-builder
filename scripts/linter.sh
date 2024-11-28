@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "Not implemented yet"
-echo 1
+exit 1

@@ -14,14 +14,17 @@ jobs:
           NUMBER: ${{ github.event.issue.number }}
           BODY: >
             This PR is not ready for review.
-      - name: Fail the job
-        run: echo "::setFailed This PR is not ready for review."
+      - name: Fail PR
+        uses: actions/github-script@v7
+        with:
+          script: core.setFailed('This PR is not ready for review.')
 
-  merge-pr:
-    name: Merge PR Request
-    runs-on: ubuntu-latest
-    needs: review-pr
-    environment: live
-    steps:
-      -  name: Merge PR
-         run: echo "::setFailed Not implemented yet"
+  # merge-pr:
+  #   name: Merge PR Request
+  #   runs-on: ubuntu-latest
+  #   needs: review-pr
+  #   environment: live
+  #   steps:
+  #     - uses: actions/github-script@v7
+  #       with:
+  #         script: core.setFailed('This PR is not ready for review.')

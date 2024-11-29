@@ -51,7 +51,7 @@ jobs:
       - name: Build Docker Image
         run: |
           set +e
-          bash scripts/linter.sh
+          bash scripts/builder.sh
           code="$?"
           echo "BUILDER_CODE=$code" >> $GITHUB_ENV
           echo "BUILDER_LOG=Builder: ✅ Build successful. >> $GITHUB_ENV "
@@ -61,7 +61,7 @@ jobs:
           {
             echo 'BUILDER_LOG<<EOF'
             echo -e "Builder: ❌ Build failed. Please check the Dockerfile for errors."
-            echo -e "Builder: 👉 Check the logs for more information: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo -e "Builder: 👉 Check the logs for more information: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
             echo EOF
           } >> "$GITHUB_ENV"
         

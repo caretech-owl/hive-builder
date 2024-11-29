@@ -3,9 +3,7 @@
 # Rule 1: Changes must be limited to a single subfolder
 
 base_dir=""
-echo $(git diff --name-only HEAD~1)
 for file in $(git diff --name-only HEAD~1); do
-    echo "Linter: Checking $file"
     # Check if base_dir is set
     if [ -z "$base_dir" ]; then
         base_dir=$(awk -F/ 'NF >= 2 { print $1 "/" $2 } NF == 1 { print $1 }' <<< $file)

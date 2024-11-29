@@ -4,6 +4,7 @@
 
 base_dir=""
 for file in $(git diff --name-only origin/main HEAD); do
+    echo "Linter: Checking $file"
     # Check if base_dir is set
     if [ -z "$base_dir" ]; then
         base_dir=$(awk -F/ 'NF >= 2 { print $1 "/" $2 } NF == 1 { print $1 }' <<< $file)

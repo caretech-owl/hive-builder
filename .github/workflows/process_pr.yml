@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch: 2
+          fetch-depth: 2
       
       - name: Run Linter
         run: |

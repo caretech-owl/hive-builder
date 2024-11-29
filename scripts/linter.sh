@@ -3,8 +3,8 @@
 # Rule 1: Changes must be limited to a single subfolder
 
 base_dir=""
-echo $(git diff --name-only origin/${{ GITHUB_BASE_REF }}..${{ GITHUB_SHA }})
-for file in $(git diff --name-only origin/${{ GITHUB_BASE_REF }}..${{ GITHUB_SHA }}); do
+echo $(git diff --name-only origin/${GITHUB_BASE_REF}..${GITHUB_SHA})
+for file in $(git diff --name-only origin/${GITHUB_BASE_REF}..${GITHUB_SHA}); do
     echo "Linter: Checking $file"
     # Check if base_dir is set
     if [ -z "$base_dir" ]; then
@@ -21,6 +21,12 @@ for file in $(git diff --name-only origin/${{ GITHUB_BASE_REF }}..${{ GITHUB_SHA
         fi
     fi
 done
+
+if [ -z "$base_dir" ]; then
+    echo "Linter: ❌ No files found in the diff. Please make sure you are comparing against the correct branch."
+    exit 1
+fi
+
 echo "Linter: ✅ Changes must be limited to a single image (${base_dir})."
 
 # Rule 2: image directory must contain a Dockerfile

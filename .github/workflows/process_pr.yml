@@ -8,6 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Run Linter
+        run: |
+          set +e
+          log=$(bash scripts/linter.sh)
+          code="$?"
+          echo "LINTER_CODE=$code" >> $GITHUB_ENV
+          {
+            echo 'LINTER_LOG<<EOF'
+            ${log}
+            echo EOF
+          } >> "$GITHUB_ENV"
       - name: Add Comment
         run: gh issue comment "$NUMBER" --body "$BODY"
         env:
@@ -15,13 +26,14 @@ jobs:
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
           BODY: >
-            This PR is not ready for review.
+            ${LINTER_CODE}
+            ${LINTER_LOG}
       - name: Change PR to Draft
+        if: env.LINTER_CODE != '0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh pr ready ${{ github.event.pull_request.number }} --undo
-      # - name: Run Linter
-      #   run: bash scripts/linter.sh
+
       # - name: Fail PR
       #   uses: actions/github-script@v7
       #   with:

@@ -3,9 +3,8 @@
 # Rule 1: Changes must be limited to a single subfolder
 
 base_dir=""
-git fetch origin main
-echo $(git diff --name-only origin/main HEAD)
-for file in $(git diff --name-only origin/main HEAD); do
+echo $(git diff --name-only origin/${{ github.base_ref }}..${{ github.sha }})
+for file in $(git diff --name-only origin/${{ github.base_ref }}..${{ github.sha }}); do
     echo "Linter: Checking $file"
     # Check if base_dir is set
     if [ -z "$base_dir" ]; then

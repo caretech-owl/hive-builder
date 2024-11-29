@@ -1,0 +1,35 @@
+on: 
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review-pr:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+    - name: Comment Guidelines and mark PR as draft
+      if: github.event.action == 'opened'
+      run: |
+        echo -e "$BODY" | gh issue comment "$NUMBER" -F -
+        gh pr ready ${{ github.event.pull_request.number }} --undo
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+        NUMBER: ${{ github.event.number }}
+        BODY: |
+          Thank you for opening a PR. I will put this into draft mode. Please check the following guidelines:
+            - The PR should only alter ONE image and thus changes should be limited to one folder in image
+            - The folder you are changing should have a Dockerfile
+            - The build should be successful
+          Mark this PR as ready when you have addressed the above guidelines.
+    - name: Comment Guidelines and mark PR as draft
+      if: github.event.action == 'synchronize'
+      run: |
+        echo -e "$BODY" | gh issue comment "$NUMBER" -F -
+        gh pr ready ${{ github.event.pull_request.number }} --undo
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_REPO: ${{ github.repository }}
+        NUMBER: ${{ github.event.number }}
+        BODY: |
+          Something has changed in the PR. I will put this into draft mode.

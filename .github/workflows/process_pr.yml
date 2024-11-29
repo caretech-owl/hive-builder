@@ -55,7 +55,7 @@ jobs:
           bash scripts/builder.sh
           code="$?"
           echo "BUILDER_CODE=$code" >> $GITHUB_ENV
-          echo "BUILDER_LOG=Builder: ✅ Build successful." >> $GITHUB_ENV
+          echo "BUILDER_LOG=Builder: ✅ Build successful.\nBuilder: 👍 PR is ready for merge." >> $GITHUB_ENV
       
       - name: Add Build Info to Comment
         if: env.BUILDER_CODE != '0'

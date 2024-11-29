@@ -16,7 +16,7 @@ jobs:
           echo "LINTER_CODE=$code" >> $GITHUB_ENV
           {
             echo 'LINTER_LOG<<EOF'
-            echo -e '${log}'
+            echo -e "${log}"
             echo EOF
           } >> "$GITHUB_ENV"
       - name: Add Comment

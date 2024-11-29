@@ -2,6 +2,10 @@ on:
   pull_request:
     types: [ready_for_review]
 
+env:
+  BUILDER_CODE: 1
+  LINTER_CODE: 1
+
 jobs:
   review-pr:
     name: Review PR
@@ -23,22 +27,18 @@ jobs:
             echo EOF
           } >> "$GITHUB_ENV"
       
-      - if: env.LINTER_CODE != '0'
-        name: Comment Linter Report
-        run: echo -e "${LINTER_LOG}" | gh issue comment "$NUMBER" -F -
+      - name: Comment Linter Report when linter reports an error
+        if: env.LINTER_CODE != '0'
+        run: |
+          echo -e "${LINTER_LOG}\nI will revert the PR to draft mode." | gh issue comment "$NUMBER" -F -
+          gh pr ready ${{ github.event.pull_request.number }} --undo
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
       
       - if: env.LINTER_CODE != '0'
-        name: Change PR to Draft
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh pr ready ${{ github.event.pull_request.number }} --undo
-      
-      - if: env.LINTER_CODE != '0'
-        name: Fail PR
+        name: Fail when linter reports an error
         uses: actions/github-script@v7
         with:
           script: core.setFailed('Linter returned an error. Please fix the errors and try again.')
@@ -64,6 +64,7 @@ jobs:
             echo 'BUILDER_LOG<<EOF'
             echo -e "Builder: ❌ Build failed. Please check the Dockerfile for errors."
             echo -e "Builder: 👉 Check the logs for more information: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo -e "I will revert the PR to draft mode."
             echo EOF
           } >> "$GITHUB_ENV"
         
@@ -73,8 +74,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
-      - if: env.BUILDER_CODE != '0'
-        name: Change PR to Draft
+      
+      - name: Change PR to Draft when build fails
+        if: env.BUILDER_CODE != '0'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh pr ready ${{ github.event.pull_request.number }} --undo

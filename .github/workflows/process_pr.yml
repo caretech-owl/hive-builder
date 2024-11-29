@@ -86,13 +86,3 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: core.setFailed('Linter returned an error. Please fix the errors and try again.')
-
-  # merge-pr:
-  #   name: Merge PR Request
-  #   runs-on: ubuntu-latest
-  #   needs: review-pr
-  #   environment: live
-  #   steps:
-  #     - uses: actions/github-script@v7
-  #       with:
-  #         script: core.setFailed('This PR is not ready for review.')

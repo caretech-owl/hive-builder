@@ -17,7 +17,7 @@ jobs:
           BODY: >
             This PR is not ready for review.
       - name: Change PR to Draft
-        run: gh pr edit ${{ github.event.pull_request.number }} --draft
+        run: gh pr ready ${{ github.event.pull_request.number }} --undo
       # - name: Run Linter
       #   run: bash scripts/linter.sh
       # - name: Fail PR

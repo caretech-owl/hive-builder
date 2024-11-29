@@ -17,8 +17,9 @@ jobs:
       
       - name: Run Linter
         run: |
+          echo ${{ github.event.pull_request.head.sha }}
           set +e
-          log=$(bash scripts/linter.sh)
+          log=$(bash scripts/linter.sh ${{ github.event.pull_request.head.sha }})
           code="$?"
           echo "LINTER_CODE=$code" >> $GITHUB_ENV
           {

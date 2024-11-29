@@ -20,14 +20,11 @@ jobs:
             echo EOF
           } >> "$GITHUB_ENV"
       - name: Add Comment
-        run: gh issue comment "$NUMBER" --body "$BODY"
+        run: gh issue comment "$NUMBER" --body "${LINTER_CODE}\n${LINTER_LOG}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
-          BODY: >
-            ${LINTER_CODE}
-            ${LINTER_LOG}
       - name: Change PR to Draft
         if: env.LINTER_CODE != '0'
         env:

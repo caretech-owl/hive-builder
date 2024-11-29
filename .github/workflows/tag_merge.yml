@@ -16,8 +16,8 @@ jobs:
       - name: Set Tag Output
         id: set-tag
         run: |
-          echo "::set-output name=img_name::$(bash scripts/process_msg.sh ${{github.event.head_commit.message}} 1)"
-          echo "::set-output name=img_ver::$(bash scripts/process_msg.sh ${{github.event.head_commit.message}} 2)"
+          echo "::set-output name=img_name::$(bash scripts/process_msg.sh \"${{github.event.head_commit.message}}\" 1)"
+          echo "::set-output name=img_ver::$(bash scripts/process_msg.sh \"${{github.event.head_commit.message}}\" 2)"
           echo $(bash scripts/process_msg.sh ${{github.event.head_commit.message}} 1)
           echo $(bash scripts/process_msg.sh ${{github.event.head_commit.message}} 2)
       - name: Log in to the Container registry

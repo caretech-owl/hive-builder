@@ -16,10 +16,11 @@ jobs:
       - name: Set Tag Output
         id: set-tag
         run: |
-          echo "::set-output name=img_name::$(bash scripts/process_msg.sh \"${{github.event.head_commit.message}}\" 1)"
-          echo "::set-output name=img_ver::$(bash scripts/process_msg.sh \"${{github.event.head_commit.message}}\" 2)"
-          echo $(bash scripts/process_msg.sh ${{github.event.head_commit.message}} 1)
-          echo $(bash scripts/process_msg.sh ${{github.event.head_commit.message}} 2)
+          image_name=$(bash scripts/process_msg.sh "${{github.event.head_commit.message}}" 1)
+          image_ver=$(bash scripts/process_msg.sh "${{github.event.head_commit.message}}" 2)
+          echo "::set-output name=img_name::${image_name}"
+          echo "::set-output name=img_ver::${image_name}"
+          echo ${image_name}/${image_ver}
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:

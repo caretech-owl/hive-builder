@@ -16,11 +16,11 @@ jobs:
           echo "LINTER_CODE=$code" >> $GITHUB_ENV
           {
             echo 'LINTER_LOG<<EOF'
-            ${log}
+            echo ${log}
             echo EOF
           } >> "$GITHUB_ENV"
       - name: Add Comment
-        run: gh issue comment "$NUMBER" --body "${LINTER_CODE}\n${LINTER_LOG}"
+        run: gh issue comment "$NUMBER" --body "${LINTER_CODE}${LINTER_LOG}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}

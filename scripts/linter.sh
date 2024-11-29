@@ -3,6 +3,7 @@
 # Rule 1: Changes must be limited to a single subfolder
 
 base_dir=""
+echo $(git diff --name-only origin/main HEAD)
 for file in $(git diff --name-only origin/main HEAD); do
     echo "Linter: Checking $file"
     # Check if base_dir is set

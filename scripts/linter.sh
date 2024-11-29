@@ -38,8 +38,8 @@ echo "Linter: ✅ ${base_dir} contains a Dockerfile."
 image_name=$(awk -F/ '{print $2}' <<< $base_dir)
 commit_message=$(git log $1 -1 --pretty=%B)
 if [[ ! "$commit_message" =~ ^release\($image_name\):[[:space:]][0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    echo "Linter: ❌ Last commit message \"${commit_message}\" does not follow the pattern 'release(<image-name>): <version>'."
+    echo "Linter: ❌ Last commit message \"${commit_message}\" does not follow the pattern 'release(|image-name|): |version|'."
     exit 1
 fi
 
-echo "Linter: ✅ Last commit message \"${commit_message}\" follows the pattern 'release(<image-name>): <version>'."
+echo "Linter: ✅ Last commit message \"${commit_message}\" follows the pattern 'release(|image-name|): |version|'."

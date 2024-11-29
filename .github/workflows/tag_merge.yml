@@ -7,6 +7,10 @@ on:
 env:
   REGISTRY: ghcr.io
 
+permissions:
+  id-token: write
+  attestations: write
+
 jobs:
   create-release:
     runs-on: ubuntu-latest

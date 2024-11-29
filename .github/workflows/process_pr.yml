@@ -1,9 +1,10 @@
-on: issue_comment
+on: 
+  pull_request:
+    types: [ready_for_review]
 
 jobs:
   review-pr:
     name: Review PR
-    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/check') && github.event.sender.id == github.event.issue.user.id }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -12,15 +13,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          NUMBER: ${{ github.event.issue.number }}
+          NUMBER: ${{ github.event.number }}
           BODY: >
             This PR is not ready for review.
-      - name: Run Linter
-        run: bash scripts/linter.sh
-      - name: Fail PR
-        uses: actions/github-script@v7
-        with:
-          script: core.setFailed('This PR is not ready for review.')
+      - name: Change PR to Draft
+        run: gh pr edit ${{ github.event.pull_request.number }} --draft
+      # - name: Run Linter
+      #   run: bash scripts/linter.sh
+      # - name: Fail PR
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: core.setFailed('This PR is not ready for review.')
 
   # merge-pr:
   #   name: Merge PR Request

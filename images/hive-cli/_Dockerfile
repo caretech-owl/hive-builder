@@ -1,0 +1,43 @@
+# OTHER VERSION WHICH MIGHT BE USED
+# FOR SHARING DATA WITH HOST
+
+FROM docker:dind
+
+ENV PIP_NO_CACHE_DIR=1 \
+  PIP_DISABLE_PIP_VERSION_CHECK=1 \
+  PIP_DEFAULT_TIMEOUT=100
+
+# Installing system deps:
+RUN apk update && apk upgrade \
+  && apk add --no-cache \
+       # Installing Python:
+       python3 python3-dev py3-pip \
+       # Installing runuser:
+       runuser
+    #    # Installing build deps:
+    #    libffi-dev openssl-dev build-base git curl bash \
+    #    # Installing Rust (latest cryptography requires it):
+    #    cargo gcc musl-dev
+
+
+
+WORKDIR /workspace
+
+ENV PATH="/root/.local/bin:$PATH"
+ENV HIVE_HOME="/hive"
+ENV UV_CACHE_DIR="/workspace/.cache/uv"
+ENV DOCKER_SOCKET=/var/run/docker.sock
+ENV RUNUSER=user
+
+RUN wget -qO- https://astral.sh/uv/install.sh | sh
+ADD --chown=user:user https://github.com/caretech-owl/hive-cli.git hive-cli
+RUN mkdir /hive && \
+    cd hive-cli && \
+    uv sync
+
+COPY images/hive-cli/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+WORKDIR /workspace/hive-cli
+ENTRYPOINT ["/entrypoint.sh", "uv", "run"]
+CMD ["app.py"]

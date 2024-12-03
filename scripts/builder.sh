@@ -1,7 +1,7 @@
 #!/bin/bash
 
 base_dir=""
-for file in $(git diff --name-only origin/main HEAD); do
+for file in $(git diff --name-only HEAD~1); do
     base_dir=$(awk -F/ 'NF >= 2 { print $1 "/" $2 } NF == 1 { print $1 }' <<< $file)
     break
 done

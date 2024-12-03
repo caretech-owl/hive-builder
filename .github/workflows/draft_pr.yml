@@ -1,9 +1,11 @@
+name: Draft Pull Request and comment Guidelines
+
 on: 
   pull_request:
     types: [opened, synchronize]
 
 jobs:
-  review-pr:
+  draft-pr:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:

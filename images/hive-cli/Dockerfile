@@ -21,6 +21,7 @@ RUN adduser --disabled-password --home /workspace --uid 1000 --shell /bin/sh use
 USER user
 WORKDIR /workspace
 
+ENV CLI_VERSION="0.1.2"
 ENV PATH="/workspace/.local/bin:$PATH"
 ENV HIVE_HOME="/workspace/hive"
 ENV UV_CACHE_DIR="/workspace//uv"
@@ -29,9 +30,9 @@ ENV RUNUSER=user
 
 # check whether something changed in the git repo
 # https://stackoverflow.com/a/39278224
-ADD https://api.github.com/repos/caretech-owl/hive-cli/git/refs/heads/main version.json
+ADD https://api.github.com/repos/caretech-owl/hive-cli/git/refs/tags/v${CLI_VERSION} version.json
 RUN wget -qO- https://astral.sh/uv/install.sh | sh \
-    && git clone https://github.com/caretech-owl/hive-cli.git \
+    && git clone --branch v${CLI_VERSION} https://github.com/caretech-owl/hive-cli.git \
     && mkdir $HIVE_HOME \
     && cd hive-cli \
     && uv sync

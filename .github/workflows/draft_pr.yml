@@ -22,6 +22,8 @@ jobs:
           Thank you for opening a PR. I will put this into draft mode. Please check the following guidelines:
             - The PR should only alter ONE image and thus changes should be limited to one folder in image
             - The folder you are changing should have a Dockerfile
+            - The last commit message should be in the format: `release(|image-name|): |version|`
+            - The image with your version should not be already present in the registry
             - The build should be successful
           Mark this PR as ready when you have addressed the above guidelines.
     - name: Comment Guidelines and mark PR as draft

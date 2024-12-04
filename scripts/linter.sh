@@ -44,7 +44,6 @@ fi
 echo "Linter: ✅ Last commit message \"${commit_message}\" follows the pattern 'release(|image-name|): |version|'."
 
 # Rule 4: Image version must not exist
-commit_message="release(hive-cli): 1.0.0"
 version=$(bash scripts/process_msg.sh "${commit_message}" 2)
 res=$(docker manifest inspect ghcr.io/caretech-owl/${image_name}:${version} 2> /dev/null)
 

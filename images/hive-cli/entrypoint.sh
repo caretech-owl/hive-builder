@@ -23,5 +23,13 @@ fi
 # Create a non-root user:
 addgroup user $DOCKER_GROUP
 
+# add .docker to user's home, add credentials
+# and make sure the user owns it
+mkdir -p /workspace/.docker
+if [ -f /docker_host/config.json ]; then
+    cat /docker_host/config.json | jq '{auths}' >> /workspace/.docker/config.json
+fi
+chown -R user:user /workspace/.docker
+
 # exec runuser -u $RUNUSER -- /bin/sh
 exec runuser -u user -- $@

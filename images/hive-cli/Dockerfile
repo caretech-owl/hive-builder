@@ -9,8 +9,8 @@ RUN apk update && apk upgrade \
   && apk add --no-cache \
        # Installing Python:
        python3 python3-dev py3-pip \
-       # Installing runuser:
-       runuser
+       # Installing runuser and jq:
+       runuser jq
     #    # Installing build deps:
     #    libffi-dev openssl-dev build-base git curl bash \
     #    # Installing Rust (latest cryptography requires it):
@@ -21,7 +21,7 @@ RUN adduser --disabled-password --home /workspace --uid 1000 --shell /bin/sh use
 USER user
 WORKDIR /workspace
 
-ENV CLI_VERSION="0.3.0"
+ENV CLI_VERSION="0.3.1"
 ENV PATH="/workspace/.local/bin:$PATH"
 ENV HIVE_HOME="/workspace/hive"
 ENV UV_CACHE_DIR="/workspace/uv"

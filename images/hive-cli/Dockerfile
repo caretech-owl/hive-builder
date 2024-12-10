@@ -21,10 +21,10 @@ RUN adduser --disabled-password --home /workspace --uid 1000 --shell /bin/sh use
 USER user
 WORKDIR /workspace
 
-ENV CLI_VERSION="0.2.1"
+ENV CLI_VERSION="0.3.0"
 ENV PATH="/workspace/.local/bin:$PATH"
 ENV HIVE_HOME="/workspace/hive"
-ENV UV_CACHE_DIR="/workspace//uv"
+ENV UV_CACHE_DIR="/workspace/uv"
 ENV DOCKER_SOCKET=/var/run/docker.sock
 ENV RUNUSER=user
 

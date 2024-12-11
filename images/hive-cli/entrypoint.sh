@@ -26,8 +26,8 @@ addgroup user $DOCKER_GROUP
 # add .docker to user's home, add credentials
 # and make sure the user owns it
 mkdir -p /workspace/.docker
-if [ -f /docker_host/config.json ]; then
-    cat /docker_host/config.json | jq '{auths}' >> /workspace/.docker/config.json
+if [ -f /docker_config.json ]; then
+    cat /docker_config.json | jq '{auths}' >> /workspace/.docker/config.json
 fi
 chown -R user:user /workspace/.docker
 

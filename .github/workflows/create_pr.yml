@@ -1,0 +1,17 @@
+on:
+  push:
+    branches-ignore:
+    - main
+
+permissions:
+  pull-requests: write
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+    steps:
+    - uses: actions/checkout@v4
+    - name: create-pull-request
+      run: gh pr create --title "${BRANCH_NAME}" --body "This is an automatically generated PR." || true

@@ -12,7 +12,15 @@ jobs:
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
       GH_TOKEN: ${{ github.token }}
+      BODY: |
+        This PR was automatically generated. Please check the following guidelines:
+          - The PR should only alter ONE image and thus changes should be limited to one folder in image
+          - The folder you are changing should have a Dockerfile
+          - The last commit message should be in the format: `release(|image-name|): |version|`
+          - The image with your version should not be already present in the registry
+          - The build should be successful
+        Mark this PR as ready when you have addressed the above guidelines.
     steps:
     - uses: actions/checkout@v4
     - name: create-pull-request
-      run: gh pr create --title "${BRANCH_NAME}" --body "This is an automatically generated PR." || true
+      run: gh pr create --title "${BRANCH_NAME}" --draft --body "${BODY}" || true

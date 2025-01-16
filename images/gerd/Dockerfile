@@ -18,7 +18,7 @@ ENV PATH="/workspace/.local/bin:$PATH"
 # To make gradio accessible from the outside
 ENV GRADIO_SERVER_NAME="0.0.0.0"
 # Mount volume/host directory to this path for persistent storage
-ENV HF_HOME="/workspace/hf"
+ENV HF_HOME="/workspace/hfsdjkhfsdkljfh"
 # gerd configuration overrides to potential persistent LoRAs
 ENV gerd_lora_output_dir="/workspace/loras"
 

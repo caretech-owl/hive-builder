@@ -10,7 +10,8 @@ jobs:
   pull-request:
     runs-on: ubuntu-latest
     env:
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
     steps:
     - uses: actions/checkout@v4
     - name: create-pull-request

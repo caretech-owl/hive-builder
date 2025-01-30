@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Rule 1: Changes must be limited to a single subfolder
-
 base_dir=""
 for file in $(git diff --name-only HEAD~1); do
     # Check if base_dir is set
@@ -43,3 +42,13 @@ if [[ ! "$commit_message" =~ ^release\($image_name\):[[:space:]][0-9]+\.[0-9]+\.
 fi
 
 echo "Linter: ✅ Last commit message \"${commit_message}\" follows the pattern 'release(|image-name|): |version|'."
+
+# Rule 4: Image version must not exist
+version=$(bash scripts/process_msg.sh "${commit_message}" 2)
+res=$(docker manifest inspect ghcr.io/caretech-owl/${image_name}:${version} 2> /dev/null)
+
+if [ $? -eq 0 ]; then
+    echo "Linter: ❌ Image ghcr.io/caretech-owl/${image_name}:${version} already exists. Please bump the version in the commit message."
+    exit 1
+fi 
+echo "Linter: ✅ Image ghcr.io/caretech-owl/${image_name}:${version} does not exist."

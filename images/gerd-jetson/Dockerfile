@@ -9,13 +9,14 @@ RUN groupadd -r -g 1000 user && \
     --uid 1000 \
     --gid 1000 \
     --shell /bin/bash \
-    user
-RUN ln -s /usr/bin/python3 /usr/bin/python
+    user && \
+    ln -s /usr/bin/python3 /usr/bin/python
+# Add python link as it is being called as python from within gerd
 
 USER user
 WORKDIR /workspace
 
-ENV GERD_VERSION="v0.5.6"
+ENV GERD_VERSION="v0.6.0"
 ENV PATH="/workspace/.local/bin:$PATH"
 # To make gradio accessible from the outside
 ENV GRADIO_SERVER_NAME="0.0.0.0"
@@ -25,7 +26,6 @@ ENV HF_HOME="/workspace/hf"
 ENV gerd_lora_output_dir="/workspace/loras"
 
 ADD --chown=user:user https://github.com/caretech-owl/gerd.git#${GERD_VERSION} gerd
-RUN sed -i 's/torch>=2.5.1/torch>=2.5.0/g' gerd/pyproject.toml
 RUN mkdir hf && \
     mkdir loras && \
     cd gerd && \

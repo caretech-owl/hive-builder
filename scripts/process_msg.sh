@@ -5,5 +5,5 @@
 if [ $2 -eq 1 ]; then
     echo $(awk -F'[()]' '{print $2}' <<< $1)
 else
-    echo $(awk -F'[ \\\\n]' '{print $2}' <<< $1)
+    echo $(awk -F'[ ]' '{print $2}' <<< $1)
 fi

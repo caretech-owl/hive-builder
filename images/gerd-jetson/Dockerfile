@@ -32,4 +32,3 @@ RUN mkdir hf && \
 WORKDIR /workspace/gerd
 ENTRYPOINT ["python3", "-m"]
 CMD ["gerd.frontends.router"]
-

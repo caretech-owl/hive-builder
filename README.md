@@ -1,3 +1,5 @@
-# hive-builder
+# Hive Builder
 
-The container registry used for the [hive](https://github.com/caretech-owl/hive).
+![](static/HiveBuilder.png)
+
+The container registry used with [hive-config](https://github.com/caretech-owl/hive-config) and [hive-cli](https://github.com/caretech-owl/hive-cli).

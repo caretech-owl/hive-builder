@@ -9,14 +9,12 @@ RUN groupadd -r -g 1000 user && \
     --uid 1000 \
     --gid 1000 \
     --shell /bin/bash \
-    user && \
-    ln -s /usr/bin/python3 /usr/bin/python
-# Add python link as it is being called as python from within gerd
+    user
 
 USER user
 WORKDIR /workspace
 
-ENV GERD_VERSION="v0.6.0"
+ENV GERD_VERSION="v0.6.1"
 ENV PATH="/workspace/.local/bin:$PATH"
 # To make gradio accessible from the outside
 ENV GRADIO_SERVER_NAME="0.0.0.0"
@@ -32,6 +30,6 @@ RUN mkdir hf && \
     pip install -e .
 
 WORKDIR /workspace/gerd
-ENTRYPOINT ["python", "-m"]
+ENTRYPOINT ["python3", "-m"]
 CMD ["gerd.frontends.router"]
 

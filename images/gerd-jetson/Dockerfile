@@ -14,20 +14,20 @@ RUN groupadd -r -g 1000 user && \
 USER user
 WORKDIR /workspace
 
-ENV GERD_VERSION="v0.7.2"
+ENV GERD_VERSION="v0.7.4"
 ENV PATH="/workspace/.local/bin:$PATH"
 # To make gradio accessible from the outside
 ENV GRADIO_SERVER_NAME="0.0.0.0"
 # Mount volume/host directory to this path for persistent storage
 ENV HF_HOME="/workspace/hf"
-# gerd configuration overrides to potential persistent LoRAs
-ENV gerd_lora_output_dir="/workspace/loras"
+# must point to a potential lora, not the parent directory of all loras
+ENV gerd_lora_output_dir="/workspace/loras/lora"
 
 ADD --chown=user:user https://github.com/caretech-owl/gerd.git#${GERD_VERSION} gerd
 RUN mkdir hf && \
     mkdir loras && \
     cd gerd && \
-    pip install -e .
+    pip install -e .[bitsandbytes]
 
 WORKDIR /workspace/gerd
 ENTRYPOINT ["python3", "-m"]

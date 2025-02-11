@@ -14,7 +14,7 @@ RUN groupadd -r -g 1000 user && \
 USER user
 WORKDIR /workspace
 
-ENV GERD_VERSION="v0.7.4"
+ENV GERD_VERSION="v0.7.5"
 ENV PATH="/workspace/.local/bin:$PATH"
 # To make gradio accessible from the outside
 ENV GRADIO_SERVER_NAME="0.0.0.0"
@@ -22,11 +22,14 @@ ENV GRADIO_SERVER_NAME="0.0.0.0"
 ENV HF_HOME="/workspace/hf"
 # must point to a potential lora, not the parent directory of all loras
 ENV gerd_lora_output_dir="/workspace/loras/lora"
+# torch 2.5.0 in l4t-pytorch sets learning rate to 0.0 with cuda
+ENV PIP_INDEX_URL="http://jetson.webredirect.org/jp6/cu128"
 
 ADD --chown=user:user https://github.com/caretech-owl/gerd.git#${GERD_VERSION} gerd
 RUN mkdir hf && \
     mkdir loras && \
     cd gerd && \
+    pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 && \
     pip install -e .[bitsandbytes]
 
 WORKDIR /workspace/gerd

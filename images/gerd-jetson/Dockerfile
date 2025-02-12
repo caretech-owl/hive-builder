@@ -14,7 +14,7 @@ RUN groupadd -r -g 1000 user && \
 USER user
 WORKDIR /workspace
 
-ENV GERD_VERSION="v0.7.6"
+ENV GERD_VERSION="v0.7.7"
 ENV PATH="/workspace/.local/bin:$PATH"
 # To make gradio accessible from the outside
 ENV GRADIO_SERVER_NAME="0.0.0.0"

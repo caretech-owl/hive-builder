@@ -23,7 +23,7 @@ ENV HF_HOME="/workspace/hf"
 # must point to a potential lora, not the parent directory of all loras
 ENV gerd_lora_output_dir="/workspace/loras/lora"
 # torch 2.5.0 in l4t-pytorch sets learning rate to 0.0 with cuda
-ENV PIP_INDEX_URL="http://jetson.webredirect.org/jp6/cu128"
+ENV PIP_INDEX_URL="https://pypi.jetson-ai-lab.io/jp6/cu128"
 
 ADD --chown=user:user https://github.com/caretech-owl/gerd.git#${GERD_VERSION} gerd
 RUN mkdir hf && \
